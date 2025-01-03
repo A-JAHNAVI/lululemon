@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lululemon</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Lululemon &#9753</div>
+    <nav>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h1>Products</h1>
+      <input type="text" id="searchBar" placeholder="Search products...">
+      <div id="productGrid"></div>
+    </section>
+  </main>
+
+  <script>
+    // List of products
+    const products = [
+      { id: 1, name: "T-Shirt", price: 20, image: "images/tshirt.jpg" },
+      { id: 2, name: "Jeans", price: 50, image: "images/jeans.jpg" },
+      { id: 3, name: "Sneakers", price: 80, image: "images/sneakers.jpg" },
+      { id: 4, name: "Jacket", price: 100, image: "images/jacket.jpg" },
+      { id: 5, name: "Hat", price: 15, image: "images/hat.jpg" },
+      { id: 6, name: "Scarf", price: 25, image: "images/scarf.jpg" },
+      { id: 7, name: "Socks", price: 10, image: "images/socks.jpg" },
+      { id: 8, name: "Sunglasses", price: 30, image: "images/sunglasses.jpg" },
+      { id: 9, name: "Backpack", price: 60, image: "images/backpack.jpg" },
+      { id: 10, name: "Watch", price: 150, image: "images/watch.jpg" },
+      { id: 11, name: "chain", price: 60, image: "images/chain.jpg" },
+      { id: 12, name: "hand bag", price: 150, image: "images/hand.jpg" }
+
+    ];
+
+    const productGrid = document.getElementById("productGrid");
+    const searchBar = document.getElementById("searchBar");
+
+    // Render products
+    function renderProducts(products) {
+      productGrid.innerHTML = products.map(product => `
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>$${product.price}</p>
+          <button onclick="addToCart(${product.id})">Add to Cart</button>
+          <button onclick="addToWishlist(${product.id})">Add to Wishlist</button>
+        </div>
+      `).join('');
+    }
+
+    // Add to Cart
+    function addToCart(productId) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const product = products.find(item => item.id === productId);
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${product.name} added to cart!`);
+    }
+
+    // Add to Wishlist
+    function addToWishlist(productId) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const product = products.find(item => item.id === productId);
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      alert(`${product.name} added to wishlist!`);
+    }
+
+    // Search functionality
+    searchBar.addEventListener("input", () => {
+      const searchQuery = searchBar.value.toLowerCase();
+      const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchQuery)
+      );
+      renderProducts(filteredProducts);
+    });
+
+    // Initial render
+    renderProducts(products);
+  </script>
+</body>
+</html>

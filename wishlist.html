@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Lululemon &#9753</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h1>Wishlist</h1>
+      <div id="wishlistGrid"></div>
+    </section>
+  </main>
+
+  <script>
+    // Retrieve wishlist items from localStorage
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const wishlistGrid = document.getElementById("wishlistGrid");
+
+    function renderWishlist() {
+      if (wishlist.length === 0) {
+        wishlistGrid.innerHTML = "<p>Your wishlist is empty.</p>";
+        return;
+      }
+
+      wishlistGrid.innerHTML = wishlist.map(product => `
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>$${product.price}</p>
+          <button onclick="removeFromWishlist(${product.id})">Remove</button>
+        </div>
+      `).join('');
+    }
+
+    // Remove a product from wishlist
+    function removeFromWishlist(productId) {
+      const updatedWishlist = wishlist.filter(product => product.id !== productId);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      alert("Product removed from wishlist.");
+      location.reload(); // Refresh the page
+    }
+
+    renderWishlist();
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Lululemon &#9753</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="wishlist.html">Wishlist</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h1>Cart</h1>
+      <div id="cartGrid"></div>
+    </section>
+  </main>
+
+  <script>
+    // Retrieve cart items from localStorage
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartGrid = document.getElementById("cartGrid");
+
+    function renderCart() {
+      if (cart.length === 0) {
+        cartGrid.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+      }
+
+      cartGrid.innerHTML = cart.map(product => `
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>$${product.price}</p>
+          <button onclick="removeFromCart(${product.id})">Remove</button>
+        </div>
+      `).join('');
+    }
+
+    // Remove a product from cart
+    function removeFromCart(productId) {
+      const updatedCart = cart.filter(product => product.id !== productId);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      alert("Product removed from cart.");
+      location.reload(); // Refresh the page
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
